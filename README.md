@@ -1,7 +1,7 @@
 # Employee Tracker App
 Welcome to the Employee Tracker Repository!
 ## Summary 
-This is a commandline application that lets a user view or manage different tables. The app uses Express js, console.table, inquirer prompt, and the SQL workbench. 
+This is a commandline application that lets a user view or manage/interact with different tables in a database. The app uses Express js, console.table, inquirer prompt, and the SQL workbench. 
 
 ## Employee Tracker App Video
 
@@ -82,6 +82,8 @@ $ npm install express
 $ npm install inquirer
 $ npm install cli-table
 $ npm install console.table
+$npm install mysql
+
 ```
 
 
