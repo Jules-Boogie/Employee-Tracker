@@ -11,7 +11,7 @@ This is a commandline application that lets a user view or manage/interact with 
 
 ## Employee Tracker App Photos
 
-![App Photo](https://github.com/Jules-Boogie/Employee-Tracker/blob/master/Assets/Capture.PNG
+![App Photo](https://github.com/Jules-Boogie/Employee-Tracker/blob/master/Assets/Capture.PNG)
 
 
 # Technologies Used
