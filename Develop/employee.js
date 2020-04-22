@@ -324,7 +324,7 @@ function populateTables(crud) {
                     options.push(res[i].role_id); //update employee
                 }
                 console.log(options)
-                //crud(options)
+                crud(options)
             })
         }
 
@@ -461,7 +461,7 @@ inquirer.prompt([
 }
 
 function deleteRole(list){
-    // get a choice of al
+    // get a choice of all
     inquirer.prompt([
         {
             type: "list",
@@ -487,7 +487,7 @@ function deleteRole(list){
 
 
 
-// function manageEmployees(){
+function manageEmployees(){
 
 //add employee
 //delete employee
@@ -525,7 +525,7 @@ inquirer.prompt([
                 populateTables(deleteEmployee);
 
 
-                // 5. Call the populate nominees function here, and pass it remove as an argument. This will give us an array of options to give to the user when they want to choose who to update;
+               
                 break;
 
         }
@@ -536,7 +536,7 @@ inquirer.prompt([
 
 
 
-// }
+ }
 
 function addEmployee(){
     inquirer.prompt([{
@@ -572,3 +572,27 @@ function addEmployee(){
 }
 
 
+function deleteEmployee(list){
+
+// populate all the employees in the table
+// offer them as choices here so the user knows which 
+// luckily you can use the populate function, just add list to this function. 
+inquirer.prompt([
+{
+    type:"list",
+    message:"Please select a user to remove by unique identifier",
+    name:"delEmployee",
+    choices:list
+
+
+}
+]).then(function(answers){
+    var query = "DELETE FROM employee WHERE ? "
+    connection.query(query, [answers.delEmployee], function(err,res){
+        if(err) throw err;
+        console.log("The Employee with the id:" + answers.delEmployee " has been deleted!")
+    })
+})
+
+
+}
