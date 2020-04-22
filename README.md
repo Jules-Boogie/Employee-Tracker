@@ -5,7 +5,7 @@ This is a commandline application that lets a user view or manage/interact with 
 
 ## Employee Tracker App Video
 
-
+[MP4 of the App](https://github.com/Jules-Boogie/Employee-Tracker/blob/master/Assets/bandicam%202020-04-22%2000-47-19-488.mp4)
 
 
 
