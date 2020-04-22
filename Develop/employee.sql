@@ -22,7 +22,8 @@ id INT NOT NULL auto_increment ,
 title VARCHAR(30),
 salary DECIMAL(10,2),
 department_id INT,
-PRIMARY KEY(id)
+PRIMARY KEY(id),
+Foreign KEY (department_id) REFERENCES department(id)
 );
 
 INSERT INTO employee_role(title, salary, department_id)
@@ -36,7 +37,9 @@ first_name VARCHAR(30),
 last_name VARCHAR(30),
 role_id INT,
 manager_id INT,
-PRIMARY KEY(id)
+PRIMARY KEY(id),
+FOREIGN KEY (role_id) REFERENCES employee_role(id)
+
 );
 
 INSERT INTO employee(first_name, last_name, role_id, manager_id)
