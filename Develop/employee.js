@@ -28,9 +28,10 @@ connection.connect(function (err) {
     if (err) throw err;
     console.log("connection established")
     // initial function 
-    //firstSearch();
-    //populateTables()
-    
+    firstSearch();
+    //populateTables(updateRole);
+
+
 
 })
 
@@ -95,7 +96,7 @@ function viewAllTable() {
     inquirer.prompt([
         {
             type: "list",
-            message: "What type of table do you want to view?",
+            message: "Pick a table in the database and view contents?",
             name: "table",
             choices: [
                 "department",
@@ -165,6 +166,7 @@ function manageDepartment() {
 
 
 
+
                     break;
 
                 //DELETE    
@@ -186,7 +188,7 @@ function manageDepartment() {
 
 
 
-// add
+//add
 
 function addDepartment() {
     inquirer.prompt([{
@@ -199,13 +201,13 @@ function addDepartment() {
                 name: answers.depName
             }
         )
-        console.log(`department ${answers.depName} is created!`)
+        console.log(`The new department ${answers.depName} is created!`)
         firstSearch()
     })
 }
 
 
-// update
+//update
 function updateDepartment(list) {
     inquirer.prompt([
         {
@@ -234,8 +236,10 @@ function updateDepartment(list) {
 
             ]), function (err, res) {
                 console.log("Here is the Updated Department Table:");
-                viewAllTable();
+
             }
+
+            viewAllTable()
 
         })
 
@@ -247,19 +251,16 @@ function updateDepartment(list) {
 function deleteDepartment(list) {
 
     inquirer.prompt([{
-        name: "delete",
+        name: "remove",
         type: "list",
         choices: options,
         message: "Which Department do you want to remove"
-    }]).then(function (answer) {
+    }]).then(function (answers) {
         var query = "DELETE FROM department WHERE ?"
         connection.query(query, {
-            id: answers.delete
-        }),
-            function (err, res) {
-                console.log("Here is the updated department:")
-                viewAllTable()
-            }
+            id: answers.remove
+        })
+        viewAllTable()
 
     })
 
@@ -332,6 +333,8 @@ function populateTables(crud) {
 }
 
 
+//manage role table in database
+
 
 
 function manageRoles() {
@@ -345,7 +348,7 @@ function manageRoles() {
             type: "list",
             name: "role",
             message: "What would you like to do to roles?",
-            choices: ["Add Roles", "Update Salary of a Role ", "Delete Roles"]
+            choices: ["Add Roles", "Update Roles", "Delete Roles"]
         }
 
     ])
@@ -357,7 +360,7 @@ function manageRoles() {
                     break;
 
                 //UPDATE    
-                case "Update Salary of a Role":
+                case "Update Roles":
                     // populate the table
                     //then give it as choices to the user to execute the update department
                     populateTables(updateRole);
@@ -385,6 +388,7 @@ function manageRoles() {
 }
 
 
+//add to table
 function addRole() {
 
     inquirer.prompt([{
@@ -400,7 +404,7 @@ function addRole() {
         message: "\nEnter the department ID of new role:\n"
     }
 
-]).then(function (answers) {
+    ]).then(function (answers) {
         var query = "INSERT INTO employee_role SET ?"
         connection.query(query,
             {
@@ -415,52 +419,54 @@ function addRole() {
 
 }
 
+//update table
+function updateRole(list) {
+    // what would you like to update
+    // update employee title and salary using the first name of the user.
+    //works just need to get a function to show the table after it makes the update
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Select Employee to update their role?",
+            name: "updRole",
+            choices: list
 
-function updateRole(list){
-// what would you like to update
-// update employee title and salary using the first name of the user.
-//works just need to get a function to show the table after it makes the update
-inquirer.prompt([
-    {
-        type: "list",
-        message: "Select Employee to update their role?",
-        name: "updRole",
-        choices: list
-
-    },
-    {
-        type: "input",
-        message: "Enter the new title",
-        name: "updTitle"
-    },
-    {
-        type: "input",
-        message: "Enter the new salary",
-        name: "updSalary"
-    }
-
-])
-    .then(function (answers) {
-        var query = "UPDATE employee_role LEFT JOIN employee ON employee.role_id = employee_role.id SET ? WHERE (employee.first_name = ?)"
-        
-        connection.query(query, [{
-           
-            title: answers.updTitle,
-            salary: answers.updSalary
-
-        },answers.updRole
-        ]), function (err, res) {
-            console.log("Here is the Updated Department Table:");
-            viewAllTable();
+        },
+        {
+            type: "input",
+            message: "Enter the new title",
+            name: "updTitle"
+        },
+        {
+            type: "input",
+            message: "Enter the new salary",
+            name: "updSalary"
         }
 
-    })
+    ])
+        .then(function (answers) {
+            var query = "UPDATE employee_role LEFT JOIN employee ON employee.role_id = employee_role.id SET ? WHERE (employee.first_name = ?)"
+
+            connection.query(query, [{
+
+                title: answers.updTitle,
+                salary: answers.updSalary
+
+            }, answers.updRole
+            ])
+            console.log("Role updated");
+            viewAllTable();
+            //firstSearch()
+
+
+        })
 
 
 
 }
+//delete from table
 
-function deleteRole(list){
+function deleteRole(list) {
     // get a choice of all
     inquirer.prompt([
         {
@@ -468,14 +474,15 @@ function deleteRole(list){
             message: "Select Employee to delete their role?",
             name: "delRole",
             choices: list
-    
+
         }
-    ]).then(function(answer){
+    ]).then(function (answer) {
         var query = "DELETE FROM employee_role LEFT JOIN employee ON employee.role_id = employee_role.id WHERE (employee.first_name = ?)"
 
-        connection.query(query, [answer.delRole], function(err,res){
-            if(err) throw err;
+        connection.query(query, [answer.delRole], function (err, res) {
+            if (err) throw err;
             console.log(`The employee, ${answer.delRole}'s role has been removed`);
+            firstSearch()
         })
     })
 
@@ -484,61 +491,62 @@ function deleteRole(list){
 }
 
 
+//manage employees
 
 
+function manageEmployees() {
 
-function manageEmployees(){
+    //add employee
+    //delete employee
+    //update employee role - will need to join employee and employee role table on employee.role_id and employee_role.id
+    //select firstname, lastname, title, and then update title
 
-//add employee
-//delete employee
-//update employee role - will need to join employee and employee role table on employee.role_id and employee_role.id
-//select firstname, lastname, title, and then update title
-
-inquirer.prompt([
-    {
-        type: "list",
-        name: "employee",
-        message: "What would you like to do with the employee table?",
-        choices: ["Add to Employee", "Update Employee Title and Salary", "Delete Employee"]
-    }
-
-])
-    .then(function (answers) {
-        switch (answers.employee) {
-            //CREATE
-            case "Add to Employee":
-                addEmployee();
-                break;
-
-            //UPDATE    
-            case "Update Employee Title and Salary":
-                
-                populateTables(updateRole); //reuse function to update employee role info
-
-
-                break;
-
-            //DELETE    
-            case "Delete Employee":
-                //populate the table
-                //then give it as choices to the user to execute the delete
-                populateTables(deleteEmployee);
-
-
-               
-                break;
-
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "employee",
+            message: "What would you like to do with the employee table?",
+            choices: ["Add to Employee", "Update Employee Title and Salary", "Delete Employee"]
         }
 
+    ])
+        .then(function (answers) {
+            switch (answers.employee) {
+                //CREATE
+                case "Add to Employee":
+                    addEmployee();
+                    break;
 
-    })
+                //UPDATE    
+                case "Update Employee Title and Salary":
+
+                    populateTables(updateRole); //reuse function to update employee role info
+
+
+                    break;
+
+                //DELETE    
+                case "Delete Employee":
+                    //populate the table
+                    //then give it as choices to the user to execute the delete
+                    populateTables(deleteEmployee);
 
 
 
+                    break;
 
- }
+            }
 
-function addEmployee(){
+
+        })
+
+
+
+}
+
+//add employee
+
+function addEmployee() {
     inquirer.prompt([{
         name: "firstname",
         message: "\nEnter the first name of new employee:\n"
@@ -556,7 +564,7 @@ function addEmployee(){
         message: "\nEnter the manager ID of new employee:\n"
     }
 
-]).then(function (answers) {
+    ]).then(function (answers) {
         var query = "INSERT INTO employee SET ?"
         connection.query(query,
             {
@@ -571,28 +579,27 @@ function addEmployee(){
     })
 }
 
+//delete employee 
 
-function deleteEmployee(list){
+function deleteEmployee(list) {
 
-// populate all the employees in the table
-// offer them as choices here so the user knows which 
-// luckily you can use the populate function, just add list to this function. 
-inquirer.prompt([
-{
-    type:"list",
-    message:"Please select a user to remove by unique identifier",
-    name:"delEmployee",
-    choices:list
+    // populate all the employees in the table
+    // offer them as choices here so the user knows which 
+    // luckily you can use the populate function, just add list to this function. 
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Please select a user to remove by unique identifier",
+            name: "delEmployee",
+            choices: list
 
-
-}
-]).then(function(answers){
-    var query = "DELETE FROM employee WHERE ? "
-    connection.query(query, [answers.delEmployee], function(err,res){
-        if(err) throw err;
-        console.log("The Employee with the id:" + answers.delEmployee " has been deleted!")
+        }
+    ]).then(function (answers) {
+        var query = "DELETE FROM employee WHERE ? "
+        connection.query(query, [answers.delEmployee], function (err, res) {
+            if (err) throw err;
+            console.log("The Employee with the id:" + answers.delEmployee + " has been deleted!")
+            firstSearch()
+        })
     })
-})
-
-
 }

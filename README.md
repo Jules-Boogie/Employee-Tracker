@@ -14,6 +14,9 @@ This is a commandline application that lets a user view or manage/interact with 
 ![App Photo](https://github.com/Jules-Boogie/Employee-Tracker/blob/master/Assets/Capture.PNG)
 
 
+![App Photo](https://github.com/Jules-Boogie/Employee-Tracker/blob/master/Assets/Capture1.PNG)
+
+
 # Technologies Used
 | [ES6-JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) | JavaScript is the programming language of HTML and the Web. JavaScript is easy to learn.  |
 |---------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------:|
